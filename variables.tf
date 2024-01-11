@@ -1,29 +1,24 @@
-variable "aws_region" {
-  description = "Region in which AWS Resources will be created"
-  type        = string
-  default     = "eu-west-1"
-}
 
-variable "is_multi_az" {
-  description = "Specifies if the RDS instance is multi-AZ"
-  type        = bool
-  default     = true
-}
+## Project Variables
+variable "region" {}
+variable "project" {}
+variable "env" {}
+variable "profile" {}
 
-variable "identifier_name" {
-  description = "Specifies if the RDS instance is multi-AZ"
-  type        = string
-  default     = "mysql-demo-db"
-}
 
-variable "db_username" {
-  description = "Specifies if the RDS instance is multi-AZ"
-  type        = string
-  default     = "dbAdmin"
-}
+## VPC variables
+variable "vpc_cidr_block" {}
+variable "public_subnets_cidr_block" {}
+variable "private_subnets_cidr_block" {}
+variable "public_subnet_az" {}
+variable "private_subnet_az" {}
 
-variable "db_password" {
-  description = "Specifies if the RDS instance is multi-AZ"
-  type        = string
-  default     = "password234-1"
-}
+## RDS Variables
+variable "rds_username" {}
+variable "rds_password" {}
+variable "rds_port" {}
+variable "rds_dbname" {}
+variable "rds_db_engine" {}
+variable "rds_db_family" {}
+variable "rds_db_version" {}
+variable "rds_maintenance_window" {}

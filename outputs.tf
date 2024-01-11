@@ -1,28 +1,39 @@
+
+###########################
+########### VPC ###########
+###########################
 output "vpc_id" {
-  value = aws_vpc.this.id
-}
-
-output "rds_endpoint" {
-  value = aws_db_instance.this.endpoint
-}
-
-output "db_subnet_group_name" {
-  value = aws_db_subnet_group.this.name
-}
-
-
-output "public_subnet" {
-  value = aws_subnet.public.id
+  value = module.vpc.vpc_id
 }
 
 output "private_subnet" {
-  value = aws_subnet.private.id
+  value = module.vpc.private_subnet_id
 }
 
-output "db_parameter_group" {
-  value = aws_db_parameter_group.this.name
+output "public_subnet" {
+  value = module.vpc.public_subnet_id
 }
 
-output "db_instance_name" {
-  value = aws_db_instance.this.identifier
+
+###########################
+########### VPC ###########
+###########################
+output "rds_endpoint" {
+  value = module.rds.rds_endpoint
 }
+
+
+output "rds_sec_group" {
+  value = module.rds.rds_security_group
+}
+
+output "rds_subnets" {
+  value = module.rds.rds_subnet_group
+}
+
+
+output "rds_instance" {
+  value = module.rds.rds_instance_id
+}
+
+
