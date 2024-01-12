@@ -1,4 +1,37 @@
+## Security Group for RDS 
+resource "aws_security_group" "this" {
+  name        = "${var.project}-${var.env}-db-sg"
+  description = "Allow access inbound traffic"
+  vpc_id      = var.aws_vpc_id
 
+  ingress {
+    description = "allow ssh access from baston"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    security_groups = [ var.bastion_sec_grp_id ]
+  }
+
+   ingress {
+    description = "Allow access from baston"
+    from_port   = var.db_port
+    to_port     = var.db_port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description     = "${var.db_engine} egress"
+  }
+
+  tags = {
+    Name = "${var.project}-${var.env}-rds-sec-grp"
+  }
+}
 
 ## KMS Key for RDS Postgres
 resource "aws_kms_key" "db_key" {
@@ -9,8 +42,9 @@ resource "aws_kms_key" "db_key" {
 
 ## RDS Subnet Group for DB
 resource "aws_db_subnet_group" "this" {
-  #name_prefix = "${var.project}-${var.env}"
-  subnet_ids =  var.db_subnet_group_ids 
+  name        = "rds db subnet group"
+  description = "rds private subnet group"
+  subnet_ids  = var.db_subnet_group_ids
 
   lifecycle {
     create_before_destroy = true

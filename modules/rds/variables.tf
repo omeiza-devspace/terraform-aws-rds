@@ -2,37 +2,41 @@
 ######## Gerneral ##########
 ###########################
 variable "env" {
-  type        = string
   description = "environment name"
+  type        = string
 }
 
 variable "project" {
-  type        = string
   description = "project name"
+  type        = string
 }
 
 variable "aws_vpc_id" {
-  type        = string
   description = "Specifies VPC ID"
+  type        = string
 }
-
 
 ###########################
 ##### DB Parameters #######
 ###########################
-variable "db_engine" {
+variable "bastion_sec_grp_id" {
+  description = "Baston Security group ID"
   type        = string
+}
+
+variable "db_engine" {
   description = "database engine type"
+  type        = string
 }
 
 variable "db_engine_version" {
-  type        = string
   description = "database engine version"
+  type        = string
 }
 
 variable "db_engine_family" {
-  type        = string
   description = "database engine family"
+  type        = string
 }
 
 ## RDS variables
@@ -55,13 +59,13 @@ variable "db_name" {
 variable "db_username" {
   description = "Specifies if the RDS instance is multi-AZ"
   type        = string
-  sensitive   = true
+#  sensitive   = true
 }
 
 variable "db_password" {
   description = "Specifies if the RDS instance is multi-AZ"
   type        = string
-  sensitive   = true
+#  sensitive   = true
 }
 
 variable "db_port" {
@@ -72,11 +76,6 @@ variable "db_port" {
 variable "db_maintenance_window" {
   description = "Specifies database maintainance duration window"
   type = string
-}
-
-variable "email_endpoint" {
-  description = "Specifies SNS email address"
-  type        = string
 }
 
 

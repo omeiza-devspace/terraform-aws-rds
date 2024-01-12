@@ -1,23 +1,24 @@
 resource "aws_subnet" "public" {
+  count             = length(var.public_subnet_cidrs)
   vpc_id            = aws_vpc.this.id
-  cidr_block        = var.public_subnet_cidr
-  availability_zone = var.public_subnet_az
-  map_public_ip_on_launch = true         
-
-  tags = {
-       Name = "${var.project}-${var.env}-public-subnet}" 
+  cidr_block        = element(var.public_subnet_cidrs, count.index)
+  availability_zone = element(var.azs, count.index)
+ 
+  tags = { 
+      Name = "${var.env}-public-subnet-${count.index + 1}"
   }
 }
 
 resource "aws_subnet" "private" {
+  count             = length(var.private_subnet_cidrs)
   vpc_id            = aws_vpc.this.id
-  cidr_block        = var.private_subnet_cidr
-  availability_zone = var.private_subnet_az
-  map_public_ip_on_launch = false       
+  cidr_block        = element(var.private_subnet_cidrs, count.index)
+  availability_zone = element(var.azs, count.index)
 
-  tags = {
-       Name = "${var.project}-${var.env}-private-subnet}" 
+  tags = { 
+      Name = "${var.env}-private-subnet-${count.index + 1}"
   }
 }
+
 
 
