@@ -4,20 +4,13 @@ resource "aws_security_group" "this" {
   description = "Allow access inbound traffic"
   vpc_id      = var.aws_vpc_id
 
-  ingress {
-    description = "allow ssh access from baston"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    security_groups = [ var.bastion_sec_grp_id ]
-  }
-
    ingress {
-    description = "Allow access from baston"
+    description = "Allow access via specified port"
     from_port   = var.db_port
     to_port     = var.db_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    security_groups = var.custom_sec_grps
   }
 
   egress {
@@ -55,6 +48,10 @@ resource "aws_db_subnet_group" "this" {
   }
 }
 
+resource "random_password" "this" {
+  length  = 20
+  special = false
+}
 
 ## RDS DB Instance for RDS
 resource "aws_db_instance" "this"{
@@ -69,12 +66,10 @@ resource "aws_db_instance" "this"{
   kms_key_id                            = aws_kms_key.db_key.arn
   db_name                               = var.db_name
   username                              = var.db_username
-  password                              = var.db_password
+  password                              = random_password.this.result
   port                                  = var.db_port
   multi_az                              = "${var.is_multi_az}"
   network_type                          = "IPV4"
-  db_subnet_group_name                  = aws_db_subnet_group.this.id
-  vpc_security_group_ids                = [aws_security_group.this.id] # receive as input from vpc module
   deletion_protection                   = false
   allow_major_version_upgrade           = false
   auto_minor_version_upgrade            = true
@@ -89,9 +84,13 @@ resource "aws_db_instance" "this"{
   performance_insights_kms_key_id       = aws_kms_key.db_key.arn
   performance_insights_retention_period = 7
   publicly_accessible                   = false
-  #parameter_group_name                  = aws_db_parameter_group.this.id
+  #parameter_group_name                 = aws_db_parameter_group.this.id
   skip_final_snapshot                   = true
   final_snapshot_identifier             = "${var.project}-db-final-snapshot-${var.env}"
+
+  #availability_zone                     = var.availability_zone
+  db_subnet_group_name                  = aws_db_subnet_group.this.id
+  vpc_security_group_ids                = [aws_security_group.this.id] # receive as input from vpc module
 
   tags = {
     Name = "${var.project}-${var.env}-db-instance"

@@ -1,20 +1,26 @@
 ###########################
-########### RDS VPC ###########
+########### VPC ###########
 ###########################
 output "rds_vpc_id" {
   value       = var.aws_vpc_id
   description = "The ID of the VPC"
 }
 
-output "rds_instance_id" {
-  value = aws_db_instance.this.id
-  description = "The ID of the RDS instance"
-}
-
 output "rds_endpoint" {
-  value = aws_db_instance.this.endpoint
+  value       = aws_db_instance.this.endpoint
+  description = "RDS endpoint."
 }
 
+output "rds_username" {
+  value       = aws_db_instance.this.username
+  description = "RDS username."
+}
+
+output "rds_password" {
+  value       = aws_db_instance.this.password
+  sensitive   = true
+  description = "RDS password."
+}
 
 output "rds_subnet_group" {
   value       = aws_db_subnet_group.this.name
@@ -35,6 +41,9 @@ output "rds_security_groups" {
   description = "RDS subnet security groups"
   value       = aws_security_group.this.name
 }
+
+
+
 
 
 

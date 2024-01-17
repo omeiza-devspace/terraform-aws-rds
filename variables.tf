@@ -19,15 +19,6 @@ variable "profile" {
   type        = string
 }
 
-###########################
-######### BASTON ##########
-###########################
-
-variable "pubkey_file_path" {
-  description = "SSH keypair file to connect to the worker nodes"
-  type        = string
-}
-
 
 ###########################
 ########### RDS ###########
@@ -61,7 +52,3 @@ variable "rds_maintenance_window" {
   type        = string
 }
 
-variable "rds_username" {} 
-variable "rds_password" {} 
-#variable "public_subnets" {}
-#variable "private_subnets" {}

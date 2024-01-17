@@ -19,9 +19,9 @@ variable "aws_vpc_id" {
 ###########################
 ##### DB Parameters #######
 ###########################
-variable "bastion_sec_grp_id" {
-  description = "Baston Security group ID"
-  type        = string
+variable "custom_sec_grps" {
+  description = "One or more security groups to associate with the endpoint"
+  type        = list(string)
 }
 
 variable "db_engine" {
@@ -62,12 +62,6 @@ variable "db_username" {
 #  sensitive   = true
 }
 
-variable "db_password" {
-  description = "Specifies if the RDS instance is multi-AZ"
-  type        = string
-#  sensitive   = true
-}
-
 variable "db_port" {
   description = "Specifies if the RDS access port"
   type        = string
@@ -78,5 +72,10 @@ variable "db_maintenance_window" {
   type = string
 }
 
+variable "enabled_ssm_parameter_store" {
+  type        = bool
+  default     = true
+  description = "Save RDS credentials to SSM Parameter Store."
+}
 
 

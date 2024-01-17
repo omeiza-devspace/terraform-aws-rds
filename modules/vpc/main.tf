@@ -18,24 +18,15 @@ resource "aws_internet_gateway" "this" {
   }
 }
 
-resource "aws_eip" "this" {
-  domain = "vpc"
 
-  tags = {
-    Name = "${var.env}-EIP"
+resource "aws_subnet" "private" {
+  count             = length(var.private_subnets)
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = element(var.private_subnets, count.index)
+  availability_zone = element(var.azs, count.index)
+  map_public_ip_on_launch = false
+  
+  tags = { 
+      Name = "${var.env}-private-subnet-${count.index + 1}"
   }
 }
-
-
-## VPC NAT Gateway
-resource "aws_nat_gateway" "this" {
-  allocation_id = aws_eip.this.id
-  subnet_id     = aws_subnet.public[0].id
-  depends_on    = [aws_internet_gateway.this]
-
-  tags = {
-    Name = "${var.env}-NAT"
-  }
-}
-
-
